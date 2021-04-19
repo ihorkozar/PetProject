@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [DatabaseChildren::class, DatabasePost::class], version = 1)
+@Database(entities = [DatabaseChildren::class, DatabasePostData::class], version = 1)
 abstract class RedditDatabase : RoomDatabase() {
     abstract val dao: Dao
 }

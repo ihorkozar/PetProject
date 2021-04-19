@@ -8,14 +8,11 @@ import com.example.petproject.repository.RedditRepository
 import kotlinx.coroutines.launch
 
 class OverviewViewModel(application: Application) : AndroidViewModel(application) {
-    private val database = getDatabase(application)
-    private val repository = RedditRepository(database)
+    private val repository = RedditRepository(getDatabase(application))
 
     private val _navigateToSelected = MutableLiveData<Models.Children>()
     val navigateToSelected: LiveData<Models.Children>
         get() = _navigateToSelected
-
-    val childrenList = repository.childrenList
 
     init {
         viewModelScope.launch {
@@ -23,11 +20,13 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    val childrenList = repository.childrenList
+
     fun displayDetail(children: Models.Children){
         _navigateToSelected.value = children
     }
 
-    /*class Factory(val app: Application) : ViewModelProvider.Factory {
+    class Factory(val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(OverviewViewModel::class.java)) {
                 @Suppress("UNCHECKED_CAST")
@@ -35,5 +34,5 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
             }
             throw IllegalArgumentException("Unable to construct viewmodel")
         }
-    }*/
+    }
 }

@@ -4,20 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.petproject.R
 import com.example.petproject.databinding.FragmentOverviewBinding
-import com.example.petproject.domain.Models
 
 class OverviewFragment : Fragment() {
     private lateinit var binding: FragmentOverviewBinding
-    private val overviewViewModel: OverviewViewModel by lazy{
-        ViewModelProvider(this).get(OverviewViewModel::class.java)
+    private var viewModelAdapter: RedditAdapter? = null
+
+    private val viewModel: OverviewViewModel by lazy {
+        val activity = requireNotNull(this.activity)
+        ViewModelProvider(this, OverviewViewModel.Factory(activity.application))
+            .get(OverviewViewModel::class.java)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel.childrenList.observe(viewLifecycleOwner, { childrenList ->
+            childrenList?.apply {
+                viewModelAdapter?.childrenList = childrenList// Why size = 1 ?????
+            }
+        })
     }
 
     override fun onCreateView(
@@ -25,24 +35,21 @@ class OverviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentOverviewBinding.inflate(inflater, container, false)
-        binding.viewModel = overviewViewModel
-        //bindRecyclerView(binding.recycler, overviewViewModel.childrenList.value)
-        binding.recycler.adapter = RedditAdapter(RedditAdapter.OnClickListener{
-            overviewViewModel.displayDetail(it)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_overview,
+            container,
+            false
+        )
+        binding.viewModel = viewModel
+        viewModelAdapter = RedditAdapter(OnClickListener {
+            viewModel.displayDetail(it)
         })
-        /*overviewViewModel.navigateToSelectedProperty.observe(this, {
-            if (null != it){
-                this.findNavController().navigate(OverviewFragmentDirections.actionShowDetail(it))
-                viewModel.displayPropertyDetailsComplete()
-            }
-        })*/
+        binding.recycler.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = viewModelAdapter
+        }
         return binding.root
     }
 
-    /*//bindRecyclerView
-    private fun bindRecyclerView(recyclerView: RecyclerView, data: List<Models.Children>?) {
-        val adapter = recyclerView.adapter as RedditAdapter
-        adapter.submitList(data)
-    }*/
 }

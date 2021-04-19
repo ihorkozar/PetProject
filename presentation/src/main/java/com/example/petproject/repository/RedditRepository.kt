@@ -14,12 +14,12 @@ class RedditRepository(private val db: RedditDatabase) {
 
     val childrenList: LiveData<List<Models.Children>> =
         Transformations.map(db.dao.getChildren()) {
-            it.asDomainModel()
+            it.asDomainModel() //size = 1
         }
 
     suspend fun refreshChildren(){
         withContext(Dispatchers.IO){
-            val postResponse = Network.redditService.getPostResponseAsync(null, LIMIT).await()
+            val postResponse = Network.redditService.getPostResponseAsync(null, LIMIT).await() //size = 50
             db.dao.insertChildren(*postResponse.asDatabaseModel())
         }
     }

@@ -1,7 +1,5 @@
 package com.example.petproject.domain
 
-import com.example.petproject.db.DatabasePost
-
 class Models {
     data class PostResponse(
         val data: Data
@@ -12,18 +10,16 @@ class Models {
     )
 
     data class Children(
-        val childrenId: Int,
         val kind: String,
-        val post: Post
+        val postData: PostData
     )
 
-    data class Post(
-        val id: Int,
+    data class PostData(
+        val id: String,
         val title: String,
         val author: String,
         val created_utc: Long,
         val thumbnail: String,
-        val num_comments: Int,
-        val sourceUrl: String
+        val num_comments: Int
     )
 }
