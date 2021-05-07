@@ -29,6 +29,7 @@ data class NetworkPost(
 
 fun NetworkPostResponse.asDatabaseModel(): Array<DatabaseChildren> = data.children.map {
     DatabaseChildren(
+        childrenId = 0,
         kind = it.kind,
         postData = DatabasePostData(
             id = it.data.id,

@@ -26,6 +26,10 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
         _navigateToSelected.value = children
     }
 
+    fun displayDetailComplete(){
+        _navigateToSelected.value = null
+    }
+
     class Factory(val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             if (modelClass.isAssignableFrom(OverviewViewModel::class.java)) {
