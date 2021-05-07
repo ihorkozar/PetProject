@@ -7,7 +7,8 @@ import com.example.petproject.domain.Models
 
 @Entity
 data class DatabaseChildren constructor(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    var childrenId: Long,
     val kind: String,
     @Embedded
     val postData: DatabasePostData
