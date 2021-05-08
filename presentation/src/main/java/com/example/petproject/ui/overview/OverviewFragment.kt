@@ -42,7 +42,7 @@ class OverviewFragment : Fragment() {
         }
         viewModel.navigateToSelected.observe(viewLifecycleOwner,{
             if (null != it){
-                this.findNavController().navigate(OverviewFragmentDirections.actionNavGalleryToDetailFragment())
+                this.findNavController().navigate(OverviewFragmentDirections.actionNavGalleryToDetailFragment(it.postData.thumbnail))
                 viewModel.displayDetailComplete()
             }
         })

@@ -31,8 +31,8 @@
         android:name="com.example.petproject.ui.detail.DetailFragment"
         android:label="detail_fragment"
         tools:layout="@layout/detail_fragment">
-        <!--<argument
+        <argument
             android:name="selected"
-            app:argType="com.example.petproject.domain.Models.Children"/>-->
+            app:argType="string"/>
     </fragment>
 </navigation>

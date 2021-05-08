@@ -1,4 +1,4 @@
-package com.example.petproject
+package com.example.petproject.util
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
