@@ -1,5 +1,6 @@
 package com.example.petproject.ui.overview
 
+import android.annotation.SuppressLint
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.petproject.domain.Models
@@ -13,7 +14,6 @@ class OverviewViewModel @Inject constructor(
     application: Application,
     private val repository: RedditRepository
 ) : AndroidViewModel(application) {
-    //private val repository = RedditRepository(getDatabase(application))
 
     private val _navigateToSelected = MutableLiveData<Models.Children>()
     val navigateToSelected: LiveData<Models.Children>
@@ -31,6 +31,7 @@ class OverviewViewModel @Inject constructor(
         _navigateToSelected.value = children
     }
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun displayDetailComplete(){
         _navigateToSelected.value = null
     }

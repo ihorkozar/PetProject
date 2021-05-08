@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.petproject.R
 import com.example.petproject.databinding.FragmentOverviewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +21,7 @@ class OverviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.childrenList.observe(viewLifecycleOwner, { childrenList ->
             childrenList?.apply {
-                viewModelAdapter?.childrenList = childrenList// Why size = 1 ?????
+                viewModelAdapter?.childrenList = childrenList
             }
         })
     }
@@ -33,12 +31,7 @@ class OverviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
-            inflater,
-            R.layout.fragment_overview,
-            container,
-            false
-        )
+        binding = FragmentOverviewBinding.inflate(inflater)
         binding.viewModel = viewModel
         viewModelAdapter = RedditAdapter(OnClickListener {
             viewModel.displayDetail(it)
@@ -47,6 +40,12 @@ class OverviewFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = viewModelAdapter
         }
+        viewModel.navigateToSelected.observe(viewLifecycleOwner,{
+            if (null != it){
+                this.findNavController().navigate(OverviewFragmentDirections.actionNavGalleryToDetailFragment())
+                viewModel.displayDetailComplete()
+            }
+        })
         return binding.root
     }
 
