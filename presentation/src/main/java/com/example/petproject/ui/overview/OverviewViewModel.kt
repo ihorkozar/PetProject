@@ -2,13 +2,18 @@ package com.example.petproject.ui.overview
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.example.petproject.db.getDatabase
 import com.example.petproject.domain.Models
 import com.example.petproject.repository.RedditRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class OverviewViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository = RedditRepository(getDatabase(application))
+@HiltViewModel
+class OverviewViewModel @Inject constructor(
+    application: Application,
+    private val repository: RedditRepository
+) : AndroidViewModel(application) {
+    //private val repository = RedditRepository(getDatabase(application))
 
     private val _navigateToSelected = MutableLiveData<Models.Children>()
     val navigateToSelected: LiveData<Models.Children>
@@ -28,15 +33,5 @@ class OverviewViewModel(application: Application) : AndroidViewModel(application
 
     fun displayDetailComplete(){
         _navigateToSelected.value = null
-    }
-
-    class Factory(val app: Application) : ViewModelProvider.Factory {
-        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(OverviewViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return OverviewViewModel(app) as T
-            }
-            throw IllegalArgumentException("Unable to construct viewmodel")
-        }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.petproject.ui.overview
+package com.example.petproject.ui
 
 import android.os.Bundle
 import android.view.Menu
@@ -14,7 +14,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.petproject.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OverviewActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration

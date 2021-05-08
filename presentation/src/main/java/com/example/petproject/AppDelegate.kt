@@ -4,11 +4,13 @@ import android.app.Application
 import android.os.Build
 import androidx.work.*
 import com.example.petproject.work.RefreshDataWorker
+import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
+@HiltAndroidApp
 class AppDelegate : Application() {
 
     val applicationScope = CoroutineScope(Dispatchers.Default)

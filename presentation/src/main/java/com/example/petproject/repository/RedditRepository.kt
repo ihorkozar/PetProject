@@ -2,29 +2,34 @@ package com.example.petproject.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.example.petproject.db.RedditDatabase
+import com.example.petproject.db.Dao
 import com.example.petproject.db.asDomainModel
 import com.example.petproject.domain.Models
-import com.example.petproject.network.Network
+import com.example.petproject.network.RedditApi
 import com.example.petproject.network.asDatabaseModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RedditRepository(private val db: RedditDatabase) {
+class RedditRepository @Inject constructor(
+    private val dao: Dao,
+    private val apiService: RedditApi
+) {
 
     val childrenList: LiveData<List<Models.Children>> =
-        Transformations.map(db.dao.getChildren()) {
+        Transformations.map(dao.getChildren()) {
             it.asDomainModel() //size = 1
         }
 
-    suspend fun refreshChildren(){
-        withContext(Dispatchers.IO){
-            val postResponse = Network.redditService.getPostResponseAsync(null, LIMIT).await() //size = 50
-            db.dao.insertChildren(*postResponse.asDatabaseModel())
+    suspend fun refreshChildren() {
+        withContext(Dispatchers.IO) {
+            val postResponse =
+                apiService.getPostResponseAsync(null, LIMIT).await() //size = 50
+            dao.insertChildren(*postResponse.asDatabaseModel())
         }
     }
 
-    companion object{
+    companion object {
         private const val LIMIT = 50
     }
 }
