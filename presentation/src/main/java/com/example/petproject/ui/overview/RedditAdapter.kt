@@ -6,11 +6,19 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petproject.R
+import com.example.petproject.databinding.ViewItemAdmobBinding
 import com.example.petproject.databinding.ViewItemBinding
 import com.example.petproject.domain.Models
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 
 class RedditAdapter(private val onClickListener: OnClickListener) :
-    RecyclerView.Adapter<RedditViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    // A menu item view type.
+    private val MENU_ITEM_VIEW_TYPE = 0
+
+    // The banner ad view type.
+    private val BANNER_AD_VIEW_TYPE = 1
 
     var childrenList: List<Models.Children> = emptyList()
         set(value) {
@@ -18,23 +26,48 @@ class RedditAdapter(private val onClickListener: OnClickListener) :
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RedditViewHolder {
-        val withBinding: ViewItemBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(parent.context),
-            RedditViewHolder.LAYOUT,
-            parent,
-            false
-        )
-        return RedditViewHolder(withBinding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        when (viewType) {
+            0 -> {
+                val withBinding: ViewItemBinding = DataBindingUtil.inflate(
+                    LayoutInflater.from(parent.context),
+                    RedditViewHolder.LAYOUT,
+                    parent,
+                    false
+                )
+                return RedditViewHolder(withBinding)
+            }
+            1 -> {
+                val withBinding: ViewItemAdmobBinding = DataBindingUtil.inflate(
+                    LayoutInflater.from(parent.context),
+                    AdMobViewHolder.LAYOUT_AD_MOB,
+                    parent,
+                    false
+                )
+                return AdMobViewHolder(withBinding)
+            }
+            else -> TODO()
+        }
     }
 
-    override fun onBindViewHolder(holder: RedditViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         holder.itemView.setOnClickListener {
             onClickListener.onClick(childrenList[position])
         }
-        holder.binding.also {
-            it.children = childrenList[position]
+        if (holder is RedditViewHolder) {
+            holder.binding.also {
+                it.children = childrenList[position]
+            }
         }
+        if (holder is AdMobViewHolder) {
+            val adView: AdView = holder.binding.adView
+            val adRequest = AdRequest.Builder().build()
+            adView.loadAd(adRequest)
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position % 10 == 0) BANNER_AD_VIEW_TYPE else MENU_ITEM_VIEW_TYPE
     }
 
     override fun getItemCount(): Int = childrenList.size
@@ -46,9 +79,18 @@ class OnClickListener(val clickListener: (children: Models.Children) -> Unit) {
 
 class RedditViewHolder(val binding: ViewItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    companion object{
+    companion object {
         @LayoutRes
         val LAYOUT = R.layout.view_item
     }
 }
+
+class AdMobViewHolder(val binding: ViewItemAdmobBinding) :
+    RecyclerView.ViewHolder(binding.root) {
+    companion object {
+        @LayoutRes
+        val LAYOUT_AD_MOB = R.layout.view_item_admob
+    }
+}
+
 
