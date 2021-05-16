@@ -2,7 +2,9 @@ package com.example.petproject.ui.overview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.annotation.LayoutRes
+import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petproject.R
@@ -19,6 +21,8 @@ class RedditAdapter(private val onClickListener: OnClickListener) :
 
     // The banner ad view type.
     private val BANNER_AD_VIEW_TYPE = 1
+
+    private var lastPosition = -1
 
     var childrenList: List<Models.Children> = emptyList()
         set(value) {
@@ -51,10 +55,10 @@ class RedditAdapter(private val onClickListener: OnClickListener) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        holder.itemView.setOnClickListener {
-            onClickListener.onClick(childrenList[position])
-        }
         if (holder is RedditViewHolder) {
+            holder.itemView.setOnClickListener {
+                onClickListener.onClick(childrenList[position])
+            }
             holder.binding.also {
                 it.children = childrenList[position]
             }
@@ -63,6 +67,11 @@ class RedditAdapter(private val onClickListener: OnClickListener) :
             val adView: AdView = holder.binding.adView
             val adRequest = AdRequest.Builder().build()
             adView.loadAd(adRequest)
+        }
+        if(holder.adapterPosition > lastPosition){
+            val anim = AnimationUtils.loadAnimation(holder.itemView.context ,R.anim.slide_in_row)
+            holder.itemView.startAnimation(anim)
+            lastPosition = holder.adapterPosition
         }
     }
 

@@ -12,5 +12,9 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="imageView">ImageView</string>
-    <string name="twTransition">textViewTransition</string>
+
+    <string name="card_transition_name">card_%1$s</string>
+    <string name="card_detail_transition_name">card_detail</string>
+    <string name="transition_name">transition</string>
+    <string name="save">Save</string>
 </resources>

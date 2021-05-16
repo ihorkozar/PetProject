@@ -14,9 +14,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.petproject.databinding.DetailFragmentBinding
+import com.google.android.material.transition.MaterialContainerTransform
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -29,16 +32,19 @@ class DetailFragment : Fragment() {
     private lateinit var binding: DetailFragmentBinding
     private lateinit var url: String
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        sharedElementEnterTransition = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
         binding = DetailFragmentBinding.inflate(inflater)
         url = DetailFragmentArgs.fromBundle(requireArguments()).selected
-        Glide.with(binding.imageView.context).load(url).into(binding.imageView)
+        Glide.with(binding.image.context).load(url).into(binding.image)
         binding.button.setOnClickListener {
-            viewModel.saveImage(url)
             checkForPermission(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 "storage",
@@ -59,8 +65,7 @@ class DetailFragment : Fragment() {
         ) == PackageManager.PERMISSION_GRANTED -> {
             Toast.makeText(requireContext(), "$name permission is granted", Toast.LENGTH_LONG)
                 .show()
-            //viewModel.saveImage(url)
-            //saveImage(url)
+            viewModel.saveImage(url)
         }
         shouldShowRequestPermissionRationale(permission) -> showDialog(
             permission,
@@ -95,27 +100,11 @@ class DetailFragment : Fragment() {
             } else {
                 Toast.makeText(requireContext(), "$name permission granted", Toast.LENGTH_LONG)
                     .show()
-                //saveImage(url)
             }
         }
 
         when (requestCode) {
             STORAGE_RQ -> innerCheck("storage")
-        }
-    }
-
-    fun saveImage(link: String){
-        var imageurl : URL? = null
-        try {
-            imageurl = URL(link)
-        } catch (e: MalformedURLException){
-            e.printStackTrace()
-        }
-        try {
-            val bitmap = BitmapFactory.decodeStream(imageurl?.openConnection()?.getInputStream())
-            MediaStore.Images.Media.insertImage(context?.contentResolver, bitmap, "", "")
-        } catch (e: IOException){
-            e.printStackTrace()
         }
     }
 

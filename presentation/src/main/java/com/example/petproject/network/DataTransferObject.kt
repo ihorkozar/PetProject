@@ -24,7 +24,8 @@ data class NetworkPost(
     val author: String,
     val created_utc: Long,
     val thumbnail: String,
-    val num_comments: Int
+    val num_comments: Int,
+    val url_overridden_by_dest: String
 )
 
 fun NetworkPostResponse.asDatabaseModel(): Array<DatabaseChildren> = data.children.map {
@@ -37,7 +38,8 @@ fun NetworkPostResponse.asDatabaseModel(): Array<DatabaseChildren> = data.childr
             author = it.data.author,
             created_utc = it.data.created_utc,
             thumbnail = it.data.thumbnail,
-            num_comments = it.data.num_comments
+            num_comments = it.data.num_comments,
+            url_overridden_by_dest = it.data.url_overridden_by_dest
         )
     )
 }.toTypedArray()
@@ -51,7 +53,8 @@ fun NetworkPostResponse.asDomainModel(): Array<Models.Children> = data.children.
             author = it.data.author,
             created_utc = it.data.created_utc,
             thumbnail = it.data.thumbnail,
-            num_comments = it.data.num_comments
+            num_comments = it.data.num_comments,
+            url_overridden_by_dest = it.data.url_overridden_by_dest
         )
     )
 }.toTypedArray()

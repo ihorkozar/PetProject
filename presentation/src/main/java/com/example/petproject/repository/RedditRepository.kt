@@ -18,18 +18,18 @@ class RedditRepository @Inject constructor(
 
     val childrenList: LiveData<List<Models.Children>> =
         Transformations.map(dao.getChildren()) {
-            it.asDomainModel() //size = 1
+            it.asDomainModel()
         }
 
     suspend fun refreshChildren() {
         withContext(Dispatchers.IO) {
             val postResponse =
-                apiService.getPostResponseAsync(null, LIMIT).await() //size = 50
+                apiService.getPostResponseAsync(null, LIMIT).await()
             dao.insertChildren(*postResponse.asDatabaseModel())
         }
     }
 
     companion object {
-        private const val LIMIT = 50
+        private const val LIMIT = 20
     }
 }

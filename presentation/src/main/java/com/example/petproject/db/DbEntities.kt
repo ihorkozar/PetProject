@@ -22,7 +22,8 @@ data class DatabasePostData constructor(
     val author: String,
     val created_utc: Long,
     val thumbnail: String,
-    val num_comments: Int
+    val num_comments: Int,
+    val url_overridden_by_dest: String
 )
 
 fun List<DatabaseChildren>.asDomainModel(): List<Models.Children> = map {
@@ -35,6 +36,7 @@ fun List<DatabaseChildren>.asDomainModel(): List<Models.Children> = map {
             created_utc = it.postData.created_utc,
             thumbnail = it.postData.thumbnail,
             num_comments = it.postData.num_comments,
+            url_overridden_by_dest = it.postData.url_overridden_by_dest
         )
     )
 }

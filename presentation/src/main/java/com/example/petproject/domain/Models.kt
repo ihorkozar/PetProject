@@ -23,6 +23,7 @@ class Models {
         val author: String,
         val created_utc: Long,
         val thumbnail: String,
-        val num_comments: Int
+        val num_comments: Int,
+        val url_overridden_by_dest: String
     )
 }
