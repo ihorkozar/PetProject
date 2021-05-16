@@ -17,7 +17,7 @@ import com.example.petproject.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class OverviewActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
 
