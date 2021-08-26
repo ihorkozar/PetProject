@@ -25,7 +25,7 @@ class OverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.childrenList.observe(viewLifecycleOwner, { childrenList ->
-            childrenList?.apply {
+            childrenList.apply {
                 viewModelAdapter?.childrenList = childrenList
             }
         })

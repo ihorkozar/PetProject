@@ -17,14 +17,15 @@ class RedditRepository @Inject constructor(
 ) {
 
     val childrenList: LiveData<List<Models.Children>> =
-        Transformations.map(dao.getChildren()) {
+        Transformations.map(
+            dao.getChildren()
+        ) {
             it.asDomainModel()
         }
 
     suspend fun refreshChildren() {
         withContext(Dispatchers.IO) {
-            val postResponse =
-                apiService.getPostResponseAsync(null, LIMIT).await()
+            val postResponse = apiService.getPostResponseAsync(null, LIMIT).await()
             dao.insertChildren(*postResponse.asDatabaseModel())
         }
     }

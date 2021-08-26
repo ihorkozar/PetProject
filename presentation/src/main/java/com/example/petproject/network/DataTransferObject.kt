@@ -25,7 +25,7 @@ data class NetworkPost(
     val created_utc: Long,
     val thumbnail: String,
     val num_comments: Int,
-    val url_overridden_by_dest: String
+    val url_overridden_by_dest: String = "1"//какая-то проблема, надо перечитать доку апи. Может это поле убрали.
 )
 
 fun NetworkPostResponse.asDatabaseModel(): Array<DatabaseChildren> = data.children.map {
