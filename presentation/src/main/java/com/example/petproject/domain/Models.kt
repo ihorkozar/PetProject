@@ -1,8 +1,5 @@
 package com.example.petproject.domain
 
-import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
-
 class Models {
     data class PostResponse(
         val data: Data

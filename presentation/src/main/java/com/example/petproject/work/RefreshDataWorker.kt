@@ -18,8 +18,6 @@ class RefreshDataWorker @Inject constructor(
     }
 
     override suspend fun doWork(): Result {
-        //val database = getDatabase(applicationContext)
-        //val repository = RedditRepository(database)
         return try {
             repository.refreshChildren()
             Result.success()

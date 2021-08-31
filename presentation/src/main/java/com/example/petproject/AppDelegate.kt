@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 @HiltAndroidApp
 class AppDelegate : Application() {
 
-    val applicationScope = CoroutineScope(Dispatchers.Default)
+    private val applicationScope = CoroutineScope(Dispatchers.Default)
 
     private fun delayedInit() {
         applicationScope.launch {

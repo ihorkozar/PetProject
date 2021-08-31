@@ -25,7 +25,7 @@ class RedditRepository @Inject constructor(
 
     suspend fun refreshChildren() {
         withContext(Dispatchers.IO) {
-            val postResponse = apiService.getPostResponseAsync(null, LIMIT).await()
+            val postResponse = apiService.getPostResponseAsync(null, LIMIT)
             dao.insertChildren(*postResponse.asDatabaseModel())
         }
     }
