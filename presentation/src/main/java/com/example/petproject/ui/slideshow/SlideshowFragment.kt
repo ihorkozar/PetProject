@@ -6,25 +6,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.petproject.R
+import com.example.petproject.databinding.FragmentHomeBinding
+import com.example.petproject.databinding.FragmentSlideshowBinding
+import com.example.petproject.ui.home.HomeViewModel
 
 class SlideshowFragment : Fragment() {
-
-    private lateinit var slideshowViewModel: SlideshowViewModel
+    private lateinit var binding: FragmentSlideshowBinding
+    private val slideshowViewModel by viewModels<SlideshowViewModel>()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        slideshowViewModel =
-                ViewModelProvider(this).get(SlideshowViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_slideshow, container, false)
-        val textView: TextView = root.findViewById(R.id.text_slideshow)
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentSlideshowBinding.inflate(inflater)
+        binding.viewModel = slideshowViewModel
         slideshowViewModel.text.observe(viewLifecycleOwner, {
-            textView.text = it
+            binding.textSlideshow.text = it
         })
-        return root
+        return binding.root
     }
 }

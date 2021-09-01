@@ -67,8 +67,8 @@ class RedditAdapter(private val onClickListener: OnClickListener) :
             val adRequest = AdRequest.Builder().build()
             adView.loadAd(adRequest)
         }
-        if(holder.adapterPosition > lastPosition){
-            val anim = AnimationUtils.loadAnimation(holder.itemView.context ,R.anim.slide_in_row)
+        if (holder.adapterPosition > lastPosition) {
+            val anim = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.slide_in_row)
             holder.itemView.startAnimation(anim)
             lastPosition = holder.adapterPosition
         }
@@ -100,5 +100,3 @@ class AdMobViewHolder(val binding: ViewItemAdmobBinding) :
         val LAYOUT_AD_MOB = R.layout.view_item_admob
     }
 }
-
-

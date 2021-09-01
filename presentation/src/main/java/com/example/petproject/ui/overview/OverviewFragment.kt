@@ -12,19 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.petproject.R
 import com.example.petproject.databinding.FragmentOverviewBinding
 import com.example.petproject.databinding.ViewItemBinding
-import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class OverviewFragment : Fragment() {
     private lateinit var binding: FragmentOverviewBinding
     private var viewModelAdapter: RedditAdapter? = null
-    private val viewModel by viewModels<OverviewViewModel>()
+    private val overviewViewModel by viewModels<OverviewViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.childrenList.observe(viewLifecycleOwner, { childrenList ->
+        overviewViewModel.childrenList.observe(viewLifecycleOwner, { childrenList ->
             childrenList.apply {
                 viewModelAdapter?.childrenList = childrenList
             }
@@ -37,24 +35,25 @@ class OverviewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentOverviewBinding.inflate(inflater)
-        binding.viewModel = viewModel
+        binding.viewModel = overviewViewModel
         viewModelAdapter = RedditAdapter(OnClickListener {
-            viewModel.displayDetail(it)
+            overviewViewModel.displayDetail(it)
         })
         binding.recycler.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = viewModelAdapter
         }
-        viewModel.navigateToSelected.observe(viewLifecycleOwner, {
+        overviewViewModel.navigateToSelected.observe(viewLifecycleOwner, {
             if (null != it) {
                 val itemBinding = ViewItemBinding.inflate(inflater)
                 val extras = FragmentNavigatorExtras(
-                    itemBinding.image as View to getString(R.string.transition_name))
+                    itemBinding.image as View to getString(R.string.transition_name)
+                )
                 this.findNavController().navigate(
                     OverviewFragmentDirections.actionNavGalleryToDetailFragment(it.postData.thumbnail),
                     extras
                 )
-                viewModel.displayDetailComplete()
+                overviewViewModel.displayDetailComplete()
             }
         })
         return binding.root
