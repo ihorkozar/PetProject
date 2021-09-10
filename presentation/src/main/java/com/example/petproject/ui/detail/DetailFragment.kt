@@ -19,8 +19,8 @@ import androidx.activity.result.contract.ActivityResultContracts.RequestPermissi
 
 class DetailFragment : Fragment() {
     private val viewModel: DetailViewModel by viewModels()
-    private lateinit var binding: DetailFragmentBinding
-    private lateinit var url: String
+    private var detailFragmentBinding: DetailFragmentBinding? = null
+    private var url: String? = null
 
     private val permissionResult = registerForActivityResult(RequestPermission()) { result ->
         if (result) {
@@ -41,7 +41,8 @@ class DetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DetailFragmentBinding.inflate(inflater)
+        val binding = DetailFragmentBinding.inflate(inflater, container, false)
+        detailFragmentBinding = binding
         url = DetailFragmentArgs.fromBundle(requireArguments()).selected
         Glide.with(binding.image.context).load(url).into(binding.image)
         binding.button.setOnClickListener {
@@ -64,7 +65,7 @@ class DetailFragment : Fragment() {
             ) == PackageManager.PERMISSION_GRANTED -> {
                 Toast.makeText(requireContext(), "$name permission is granted", Toast.LENGTH_LONG)
                     .show()
-                viewModel.downloadImage(url)
+                url?.let { viewModel.downloadImage(it) }
             }
             shouldShowRequestPermissionRationale(permission) -> {
                 showDialog(permission, name,)
@@ -84,6 +85,11 @@ class DetailFragment : Fragment() {
         }
         val dialog = builder.create()
         dialog.show()
+    }
+
+    override fun onDestroyView() {
+        detailFragmentBinding = null
+        super.onDestroyView()
     }
 
     companion object {

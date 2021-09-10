@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class OverviewFragment : Fragment() {
-    private lateinit var binding: FragmentOverviewBinding
+    private var fragmentOverviewBinding: FragmentOverviewBinding? = null
     private var viewModelAdapter: RedditAdapter? = null
     private val overviewViewModel by viewModels<OverviewViewModel>()
 
@@ -34,7 +34,8 @@ class OverviewFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentOverviewBinding.inflate(inflater)
+        val binding = FragmentOverviewBinding.inflate(inflater)
+        fragmentOverviewBinding = binding
         binding.viewModel = overviewViewModel
         viewModelAdapter = RedditAdapter(OnClickListener {
             overviewViewModel.displayDetail(it)
